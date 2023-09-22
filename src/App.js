@@ -1,23 +1,22 @@
-import logo from './logo.svg';
 import './App.css';
+import React from "react"
+import Slider from "./Components/Slider";
 
 function App() {
+    const [state, setState] = React.useState([]);
+
+    React.useEffect(()=>{
+        fetch('https://api.github.com/search/repositories?q=created:%3E2023-08-22&sort=stars&order=desc&page=1')
+            .then((res)=>res.json())
+            .then(data =>{
+                let arr = data?.items?.map((item)=> item.owner.avatar_url);
+                setState(arr);
+            })
+    }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <Slider images={state} width={700} focusCenter={true}/>
     </div>
   );
 }
